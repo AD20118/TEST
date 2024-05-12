@@ -3,8 +3,8 @@ pipeline {
   /*  triggers {
         githubPush()
     }*/
-  /*  stages {
-        stage('Checkout') {
+   stages {
+      /*  stage('Checkout') {
             steps {
                 git 'https://github.com/nazimgueye/fil_rouge.git'
             }
