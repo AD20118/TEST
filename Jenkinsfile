@@ -38,10 +38,10 @@ pipeline {
         }*/
         stage('Run Docker Compose') {
             steps {
-                /*script {
+                //script {
                     // Lancement des conteneurs Docker avec Docker Compose
                     sh 'docker-compose up -d --build'
-                }*/
+                //}
             }
         }
     }
