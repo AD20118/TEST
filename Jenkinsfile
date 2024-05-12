@@ -1,23 +1,23 @@
 pipeline {
     agent any
-    triggers {
-        githubPush()
+  /*  triggers {
+        githubPush()*/
     }
-    stages {
+  /*  stages {
         stage('Checkout') {
             steps {
                 git 'https://github.com/nazimgueye/fil_rouge.git'
             }
-        }
-        stage('Build Docker Images') {
+        }*/
+      /*  stage('Build Docker Images') {
             steps {
                 script {
                     // Build des images Docker
                     sh 'docker-compose up -d'
                 }
             }
-        }
-        stage('Deploy to Kubernetes') {
+        }*/
+       /* stage('Deploy to Kubernetes') {
             steps {
                 script {
                     // Récupérer le fichier kubeconfig depuis les credentials de Jenkins
@@ -35,7 +35,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Run Docker Compose') {
             steps {
                 script {
@@ -45,7 +45,7 @@ pipeline {
             }
         }
     }
-    post {
+    /*post {
         success {
             // Arrêter les conteneurs Docker en cas de succès
             // script {
@@ -58,5 +58,5 @@ pipeline {
             // Envoyer un message d'échec à Slack
             slackSend channel: '#projetdevops', message: 'Build échoué'
         }
-    }
+    }*/
 }
