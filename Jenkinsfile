@@ -1,261 +1,62 @@
 pipeline {
     agent any
-    environment {
-        KUBECONFIG = credentials('kuber_token')
-        web_image = "my_php_image"
-        db_image = "my_mysql_image"
-        registry_credential = "docker-credential"
-    }
-    stages {
-        stage('Checkout') {
+  /*  triggers {
+        githubPush()
+    }*/
+   stages {
+      /*  stage('Checkout') {
             steps {
-                git 'pipeline {
-    agent any
-    environment {
-        KUBECONFIG = credentials('kuber_token')
-        web_image = "my_php_image"
-        db_image = "my_mysql_image"
-        registry_credential = "docker-credential"
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'pipeline {
-    agent any
-    environment {
-        KUBECONFIG = credentials('kuber_token')
-        web_image = "my_php_image"
-        db_image = "my_mysql_image"
-        registry_credential = "docker-credential"
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'pipeline {
-    agent any
-    environment {
-        KUBECONFIG = credentials('kuber_token')
-        web_image = "my_php_image"
-        db_image = "my_mysql_image"
-        registry_credential = "docker-credential"
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/AD20118/TEST'
+                git 'https://github.com/nazimgueye/fil_rouge.git'
             }
-        }
-        stage('Test') {
-            steps {
-                echo 'docker ps -a'
-            }
-        }
-        stage('Docker compose build') {
+        }*/
+      /*  stage('Build Docker Images') {
             steps {
                 script {
-                    if (isUnix()) {
-                        sh "docker-compose up -d --build"
-                    } else {
-                        bat "docker-compose up -d --build"
+                    // Build des images Docker
+                    sh 'docker-compose up -d'
+                }
+            }
+        }*/
+       /* stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Récupérer le fichier kubeconfig depuis les credentials de Jenkins
+                    def kubeconfig = credentials('kube_config')
+
+                    // Assurez-vous que le fichier kubeconfig existe
+                    if (!fileExists(kubeconfig)) {
+                        error "Le fichier kubeconfig n'existe pas à l'emplacement spécifié."
+                    }
+
+                    // Appliquer les ressources Kubernetes depuis le dossier 'kubernetes' en utilisant le fichier kubeconfig
+                    dir('kubernetes') {
+                        // Utilisez la commande kubectl apply avec l'option --kubeconfig pour spécifier le fichier kubeconfig
+                        sh "kubectl apply -f . --kubeconfig=${kubeconfig}"
                     }
                 }
             }
-        }
-      
-        // stage('Docker push') {
-        //     steps {
-        //         script {
-        //             if (isUnix()) {
-        //                 sh "docker push ibrademe/$web_image"
-        //                 sh "docker push ibrademe/$db_image"
-        //             } else {
-        //                 bat "docker push ibrademe/$web_image"
-        //                 bat "docker push ibrademe/$db_image"
-        //             }
-        //         }
-        //     }
-        // }
-        stage('Kubernetes apply') {
+        }*/
+        stage('Run Docker Compose') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'kubectl apply -f '
-                    } else {
-                        bat 'kubectl apply -f web-deployment.yaml'
-
- }
-                }
+                /*script {
+                    // Lancement des conteneurs Docker avec Docker Compose
+                    sh 'docker-compose up -d --build'
+                }*/
             }
         }
     }
-    post {
+    /*post {
         success {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec succès'
+            // Arrêter les conteneurs Docker en cas de succès
+            // script {
+            //     bat 'docker-compose down -v'
+            // }
+            // Envoyer un message de réussite à Slack
+            slackSend channel: '#projetdevops', message: 'Build réussi'
         }
         failure {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec des erreurs'
+            // Envoyer un message d'échec à Slack
+            slackSend channel: '#projetdevops', message: 'Build échoué'
         }
-    }
-}'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'docker ps -a'
-            }
-        }
-        stage('Docker compose build') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh "docker-compose up -d --build"
-                    } else {
-                        bat "docker-compose up -d --build"
-                    }
-                }
-            }
-        }
-      
-        // stage('Docker push') {
-        //     steps {
-        //         script {
-        //             if (isUnix()) {
-        //                 sh "docker push ibrademe/$web_image"
-        //                 sh "docker push ibrademe/$db_image"
-        //             } else {
-        //                 bat "docker push ibrademe/$web_image"
-        //                 bat "docker push ibrademe/$db_image"
-        //             }
-        //         }
-        //     }
-        // }
-        stage('Kubernetes apply') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh 'kubectl apply -f '
-                    } else {
-                        bat 'kubectl apply -f web-deployment.yaml'
-
- }
-                }
-            }
-        }
-    }
-    post {
-        success {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec succès'
-        }
-        failure {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec des erreurs'
-        }
-    }
-}'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'docker ps -a'
-            }
-        }
-        stage('Docker compose build') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh "docker-compose up -d --build"
-                    } else {
-                        bat "docker-compose up -d --build"
-                    }
-                }
-            }
-        }
-      
-        // stage('Docker push') {
-        //     steps {
-        //         script {
-        //             if (isUnix()) {
-        //                 sh "docker push ibrademe/$web_image"
-        //                 sh "docker push ibrademe/$db_image"
-        //             } else {
-        //                 bat "docker push ibrademe/$web_image"
-        //                 bat "docker push ibrademe/$db_image"
-        //             }
-        //         }
-        //     }
-        // }
-        stage('Kubernetes apply') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh 'kubectl apply -f '
-                    } else {
-                        bat 'kubectl apply -f web-deployment.yaml'
-
- }
-                }
-            }
-        }
-    }
-    post {
-        success {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec succès'
-        }
-        failure {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec des erreurs'
-        }
-    }
-}'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'docker ps -a'
-            }
-        }
-        stage('Docker compose build') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh "docker-compose up -d --build"
-                    } else {
-                        bat "docker-compose up -d --build"
-                    }
-                }
-            }
-        }
-      
-        // stage('Docker push') {
-        //     steps {
-        //         script {
-        //             if (isUnix()) {
-        //                 sh "docker push ibrademe/$web_image"
-        //                 sh "docker push ibrademe/$db_image"
-        //             } else {
-        //                 bat "docker push ibrademe/$web_image"
-        //                 bat "docker push ibrademe/$db_image"
-        //             }
-        //         }
-        //     }
-        // }
-        stage('Kubernetes apply') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh 'kubectl apply -f '
-                    } else {
-                        bat 'kubectl apply -f web-deployment.yaml'
-
- }
-                }
-            }
-        }
-    }
-    post {
-        success {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec succès'
-        }
-        failure {
-            slackSend channel: '#projet-aws', message: 'Code exécuté avec des erreurs'
-        }
-    }
+    }*/
 }
